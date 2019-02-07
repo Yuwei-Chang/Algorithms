@@ -1,0 +1,29 @@
+Problem: Given an array of integers, sort the elements in the array in ascending order. 
+         The selection sort algorithm should be used to solve this problem.
+         
+Solution: Find global minimum in unsorted area, then swap it with the most left position of unsorted area
+
+Time Complexity: O(n^2)
+Space Complexity: O(1)
+
+Code:
+public void selectionSort(int[] array) {
+	if (array == null || array.length < 2) {
+		return array;
+  }
+  for (int i = 0; i < array.length; i++) {
+	  int min = i;
+	  for (int j = i + 1; j < array.length; j++) {
+		  if (array[j] < array[min]) {
+			  min = j;
+      }
+    }
+    swap(array, i, min);
+  }
+	return array;
+}
+private void swap(int[] array, int i, int j) {
+	int temp = array[i];
+	array[i] = array[j];
+	array[j] = temp;
+}
