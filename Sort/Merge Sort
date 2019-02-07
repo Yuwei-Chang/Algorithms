@@ -1,0 +1,72 @@
+Problem: Given an array of integers, sort the elements in the array in ascending order. 
+         The merge sort algorithm should be used to solve this problem. 
+     
+Solution: 
+Separate the array into 2 parts and sorting them separately.
+After that, merge it into a sorted array.
+eg.
+                                                    1463275
+                                                    /     \
+                                               146         3275
+                                              /     \     /    \
+                                             1     46     32   75
+                                            |      / \    / \  / \
+                                            1     4  6    3 2   7 5
+                                       =========================================
+                                            1      46       23     57
+                                              \   /           \    /
+                                               146              2357
+                                                  \             /
+                                                      1234567
+Time Complexity Analysis:
+for the upper part: cut into 2 arrays: every time is O(1)
+                                    times: 1 + 2 + 4 + 8 + ... + n/2 = n
+So, TC for the upper part: O(n)
+
+for the lower part: combine into 1 array: every time is O(n),
+                                   times: height of tree: O(logn)
+So, TC for the lower part: O(nlogn) 
+
+Time Complexity: O(nlogn)
+Space Complexity: Using a helper array to help store sorted part, so extra space is O(n),
+                                   recursion tree height O(logn)
+                 O(n + logn) ~ O(n)
+
+
+Code:
+public int[] mergeSort(int[] array) {
+    if (array == null || array.length &lt; 2) {
+        return array;
+    }
+    int[] helper = new int[array.length]; 
+    mergeSort(array, helper, 0, array.length - 1);
+    return array;
+}
+private void mergeSort(int[] array, int[] helper, int left, int right) {
+    if (right - left &lt; 1) {
+        return;
+    }
+    int mid = left + (right - left) / 2;
+    mergeSort(array, helper, left, mid);
+    mergeSort(array, helper, mid + 1, right);
+    merge(array, helper, left, mid, right);
+}
+private void merge(int[] array, int[] helper, int left, int mid, int right) {
+    // using a helper array to store each time sorted part, the 
+    // extra space is only this helper array
+    for (int i = left; i &lt;= right; i++) {
+        helper[i] = array[i];
+    }
+    int leftIndex = left;
+    int rightIndex = mid + 1;
+    while (leftIndex &lt;= mid &amp;&amp; rightIndex &lt;= right) {
+        if (helper[leftIndex] &lt;= helper[rightIndex]) {
+            array[left++] = helper[leftIndex++];
+        } else {
+            array[left++] = helper[rightIndex++];
+        }
+    }
+    while (leftIndex &lt;= mid) {
+        array[left++] = helper[leftIndex++];
+    }
+}
