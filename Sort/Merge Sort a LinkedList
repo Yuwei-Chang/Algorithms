@@ -1,0 +1,53 @@
+step 1: Find the middle of LinkedList
+step 2: cut it into 2 parts
+step 3: sorting 2 parts separately
+step 4: merge 2 LinkedList
+
+Time Complexity: O(nlogn)
+separating process: logn times, each time O(n), because find middle of LinkedList is O(n),--- O(nlogn)
+merge process: logn times, each time O(n)---O(nlog)
+
+Space Complexity: O(logn)
+the call stack is O(logn)
+
+Code:
+public ListNode mergeSort(ListNode head) {
+	if (head == null || head.next == null) {
+	  return head;
+  }
+  ListNode mid = findMid(head);
+  ListNode second = mid.next;
+  mid.next = null;
+  head = mergeSort(head);
+  second = mergeSort(second);
+  return merge(head, second);
+}
+private ListNode findMid(ListNode head) {
+	ListNode slow = head;
+	ListNode fast = head;
+	while (fast.next != null && fast.next.next != null) {
+		slow = slow.next;
+		fast = fast.next.next;
+  }
+  return slow;
+}
+private ListNode merge(ListNode head, ListNode second) {
+	ListNode dummy = new ListNode(0);
+	ListNode curr = dummy;
+ 	while (head != null && second != null) {
+	  if (head.key <= second.key) {
+	    curr.next = head;
+	    head = head.next;
+    } else {
+	    curr.next = second;
+	    second = second.next;
+    }
+  }
+  if (head != null) {
+	  curr.next = head;
+  }
+  if (second.next != null) {
+	  curr.next = second;
+  }
+  return dummy.next;
+}
