@@ -1,0 +1,41 @@
+Problem: Given an array of balls, where the color of the balls can only be Red, Green or Blue, 
+sort the balls such that all the Red balls are grouped on the left side, all the Green balls are grouped in the middle 
+and all the Blue balls are grouped on the right side. (Red is denoted by -1, Green is denoted by 0, and Blue is denoted by 1).
+
+Solution: 
+Using block method. (Same as quick sort)
+3 blocks to create 4 areas
+[0, i) : -1
+[i, k) : 0;
+[k, j] : unsorted area
+(j, array.length - 1]: 1
+
+Time Complexity: O(n), only go through the array for one time
+Space Complexity: O(1)
+
+Code:
+
+public int[] rainbowSort(int[] array) {
+	if (array == null || array.length < 2) {
+	  return array;
+  }
+  int i = 0;
+  int k = 0;
+  int j = array.length - 1;
+  while (k <= j) {
+	  if (array[k] == -1) {
+	    swap(array, i++, k++);
+    } else if (array[k] == 0) {
+	    k++;
+    } else {
+	    swap(array, j--, k);
+    }
+  }
+  return array;
+}
+private void swap (int[] array, int i, int j) {
+	int temp = array[i];
+	array[i] = array[j];
+	array[j] = temp;
+}
+
