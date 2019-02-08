@@ -1,0 +1,74 @@
+/*
+ * Problem: Given a string"A1B2C3D4¡±, convert it to ¡°ABCD1234¡±.
+
+Solution:
+The result is same to the result of merge sort, which only need to change merge function to make letters before numbers.
+                            A1B2C3D4
+				          /	         \
+			          A1B2           C3D4
+				      /  \          /   \
+ 			 	     A1  B2        C3   D4
+				    / \  / \       / \  / \
+				   A   1 B  2     C  3  D  4
+			  ===============================
+				    A1    B2       C3    D4
+				     \    /          \   /
+				      AB12            CD34
+					     \           /
+					        ABCD1234
+                    
+Time Complexity: O(nlogn) --> Details are in Merge Sort file.
+Space Complexity: O(n + logn): helper array, change string to array : O(2n), call stack: O(logn)
+
+ */
+public class A1B2C3D4_ABCD1234 {
+	public String convert(String s) {
+		if (s == null || s.length() < 2) {
+			return s;
+		}
+		char[] array = s.toCharArray();
+		char[] helper = new char[array.length];
+		mergeSort(array, helper, 0, array.length - 1);
+		return new String(array);
+	}
+	private void mergeSort(char[] array, char[] helper, int left, int right) {
+		if (right <= left) {
+			return;
+		}
+		int mid = left + (right - left) / 2;
+		mergeSort(array, helper, left, mid);
+		mergeSort(array, helper, mid + 1, right);
+		merge(array, helper, left, mid, right);
+	}
+	private void merge(char[] array, char[] helper, int left, int mid,
+			int right) {
+		for (int i = left; i <= right; i++) {
+			helper[i] = array[i];
+		}
+		int leftIndex = left;
+		int rightIndex = mid + 1;
+		while (leftIndex <= mid && rightIndex <= right) {
+			if (helper[leftIndex] >= 'A' && helper[leftIndex] <= 'Z'
+					&& helper[rightIndex] >= 'A' && helper[rightIndex] <= 'Z'
+					|| helper[leftIndex] >= '0' && helper[leftIndex] <= '9'
+							&& helper[rightIndex] >= '0'
+							&& helper[rightIndex] <= '9') {
+				if (helper[leftIndex] <= helper[rightIndex]) {
+					array[left++] = helper[leftIndex++];
+				} else {
+					array[left++] = helper[rightIndex++];
+				}
+			} else {
+				if (helper[leftIndex] >= 'A' && helper[leftIndex] <= 'Z') {
+					array[left++] = helper[leftIndex++];
+				} else {
+					array[left++] = helper[rightIndex++];
+				}
+			}
+		}
+		while (leftIndex <= mid) {
+			array[left++] = helper[leftIndex++];
+		}
+	}
+
+}
