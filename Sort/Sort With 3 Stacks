@@ -1,0 +1,77 @@
+Problems: Given an array stored in Stack1, how to sort the numbers by using additional two stacks.
+
+3 stacks function:
+s1: original array(unsorted part)
+s2: using as a buffer
+s3: contains sorted part
+
+Solution 1:
+eg. 
+s1:[1, 4, 2, 5, 0, 9    1, 4, 2, 5, 9   4, 2, 5, 9   4, 5, 9     5, 9     9
+global min: 9, 0  9, 5, 2, 1    9, 5, 2   9, 5, 4   9, 5
+s2:[9, 0, 5, 2, 4 ,1    9, 5, 2, 4, 1    9, 5, 2, 4   9, 5, 4    9, 5
+s3:[0, 1, 2, 4, 5, 9
+Then poll all elements from s3 to s1.
+
+Time Complexity: n + n-1 + n-2 + n-3 + ... + 1 ~ O(n^2)
+
+Solution 2: 
+How to reduce time complexity?
+only merge sort time complexity is O(nlog)
+So, using merge sort.
+step 1: s1 poll half elements to s2
+step 2: sort s1 and s2 seperately
+step 3: put sorted part in s1, s2 into s3. (compare them put smaller one into s3)
+step 4: s3 poll sorted elements into s1
+
+Time Complexity: O(nlogn)
+Space Complexity: O(n + logn) -- recursion call stack: logn, extra stack: n
+
+Code:
+
+public void sortWithStacks(LinkedList<Integer> s1) {
+    LinkedList<Integer> s2 = new LinkedList<>();
+    LinkedList<Integer> s3 = new LinkedList<>();
+    if (s1 == null || s1.size() < 2) {
+        return;
+    }
+    sort(s1, s2, s3, s1.size());
+}
+private void sort(LinkedList<Integer> s1, LinkedList<Integer> s2, LinkedList<Integer> s3, int length) {
+    if (length < 2) {
+        return;
+    }
+    int mid = length / 2;
+    int mid1 = length - mid;
+    // step 1
+    for (int i = 0; i < mid1; i++) {
+        s1.pollFirst(s2.offerFirst());
+    }
+    // step 2
+    sort(s1, s3, s2);
+    sort(s2, s3, s1);
+    int a = 0;
+    int b = 0;
+    // step 3
+    while (a < mid && b < mid1) {
+        if (s1.peekFirst() <= s2.peekFirst()) {
+            s3.offerFirst(s1.pollFirst());
+            a++;
+        } else {
+            s3.offerFirst(s2.pollFirst());
+            b++;
+        }
+    }
+    while (a < mid) {
+        s3.offerFirst(s1.pollFirst());
+        a++;
+    }
+    while (b < mid1) {
+        s3.offerFirst(s2.pollFirst());
+        b++;
+    }
+    // step 4
+    for (int i = 0; i < length; i++) {
+        s1.offerFirst(s3.pollFirst());
+    }
+}
