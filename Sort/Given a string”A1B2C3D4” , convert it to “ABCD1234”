@@ -1,5 +1,5 @@
 /*
-Problem: Given a string"A1B2C3D4¡±, convert it to ¡°ABCD1234¡±.
+Problem: Given a string"A1B2C3D4", convert it to "ABCD1234".
 
 Solution:
 The result is same to the result of merge sort, which only need to change merge function to make letters before numbers.
