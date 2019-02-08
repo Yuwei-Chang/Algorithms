@@ -1,0 +1,25 @@
+TC: O(logn)
+SC: O(1)
+
+public int findSmallestLarger(int[] array, int target) {
+	if (array == null || array.length == 0) {
+	  return -1;
+  }
+  int low = 0;
+  int high = array.length - 1;
+  while (low + 1 < high) {
+	  int mid = low + (high - low) / 2;
+	  if (array[mid] <= target) {
+	    low = mid;
+    } else {
+	    high = mid;
+    }
+  }
+  if (array[low] > target) {
+	  return low;
+  } else if (array[high] > target) {
+	  return high;
+  } else {
+	  return -1;
+  }
+}
