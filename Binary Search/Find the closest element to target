@@ -1,0 +1,32 @@
+Problem: Given a target integer T and an integer array A sorted in ascending order, find the index i in A such that A[i] is closest to T.
+
+Solution: Compare to the classic binary search, for this problem we need to end up with the last two elements. 
+Then compare these two elements, choose the better one.
+
+TC: O(logn)
+SC: O(1)
+
+Code:
+
+public int findClosest(int[] array, int target) {
+	if (array == null || array.length == 0) {
+	  return -1;
+  }
+  int low = 0;
+  int high = array.length - 1;
+  while (low + 1 < high) {
+	  int mid = low + (high - low) / 2;
+	  if (array[mid] == target) {
+	    return mid;
+    } else if (array[mid] > target) {
+	    high = mid;
+    } else {
+	    low = mid;
+    }
+  }
+  if (Math.abs(array[low] - target) <= Math.abs(array[high] - target)) {
+	  return low;
+  } else {
+	  return high;
+  }
+}
