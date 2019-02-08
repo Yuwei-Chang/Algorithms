@@ -1,0 +1,50 @@
+Problem: Given a target integer T, a non-negative integer K and an integer array A sorted in ascending order, 
+find the K closest numbers to T in A.
+
+Solution:
+step 1: find the largest element which is smaller or equal to the target.
+step 2: regarding the element which you find in step 1 as a pivot, expand the range to find answer.
+
+TC: O(logn + k)
+SC: O(1)
+
+Code:
+
+public int[] KClosest(int[] array, int target, int k) {
+	if (array == null || array.length < k) {
+	  return new int[0];
+  }
+  int position = findLargestSmallerOrEqual(array, target);
+  int[] res = new int[k];
+  int left = position;
+  int right = position + 1;
+  for (int i = 0; i < k; i++) {
+	  if (left < 0 || right < array.length && Math.abs(array[right] - target) < Math.abs(array[left] - target)) {
+		  res[i] = array[right++];
+    } else {
+	    res[i] = array[left--];
+    }
+  }
+  return res;
+}
+private int findLargestSmallerOrEqual(int[] array, int target) {
+	int low = 0;
+	int high = array.length - 1;
+	while (low + 1 < high) {
+		int mid = low + (high - low) / 2;
+		if (array[mid] == target) {
+	    return mid;
+    } else if (array[mid] > target) {
+	    high = mid;
+    } else {
+	    low = mid;
+    }
+  }
+  if (array[high] > target) {
+    return low;
+  } else if (target - array[high] < target - array[low]) {
+	  return high;
+  } else {
+	  return -1;
+  }
+}
