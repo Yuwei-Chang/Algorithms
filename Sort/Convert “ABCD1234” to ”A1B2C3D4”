@@ -1,0 +1,47 @@
+Problem: Given a string “ABCD1234”, convert it to ”A1B2C3D4”.
+
+Solution: 
+   ABCD1234
+  AB DC 21 34
+  AB 12CD 34
+  AB12 | CD34
+A 1B 2 | C 3D 4
+
+Time Complexity: O(nlogn), each time reverse needs O(n), and logn times
+Space Complexity: O(logn), call stack height
+
+Code:
+public String convert(String s) {
+	if (s == null || s.length() < 2) {
+	  return s;
+  }
+  char[] array = s.toCharArray();
+  convert(array, 0, array.length - 1);
+  return new String(array);
+}
+private void convert(char[] array, int left, int right) {
+	if (right - left <= 1) {
+		return;
+  }
+	int length = right - left + 1;
+  int mid = left + length / 2;
+  int leftmid = left + length / 4;
+  int rightmid = left + length * 3 / 4;
+  reverse(array, leftmid, mid - 1);
+  reverse(array, mid, rightmid - 1);
+  reverse(array, leftmid, rightmid - 1);
+  convert(array, left, left + (leftmid - left) * 2 -1);
+  convert(array, left + (leftmid - left) * 2, right);
+}
+private void reverse(char[] array, int left, int right) {
+	while (left < right) {
+		swap(array, left++, right--);
+  }
+}
+private void swap(char[] array, int i, int j) {
+	char temp = array[i];
+	array[i] = array[j];
+	array[j] = temp;
+}
+
+
