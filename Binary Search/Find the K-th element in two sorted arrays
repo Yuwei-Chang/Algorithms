@@ -1,0 +1,34 @@
+Problem: Given two sorted arrays of integers, find the Kth smallest number.
+Assumptions:
+The two given arrays are not null and at least one of them is not empty
+K >= 1, K <= total lengths of the two sorted arrays
+
+Solution: Using binary search method to consider. 
+if we find a[k/2] < b[k/2] → this represents that the first k/2 elements are not correct answer. We can just discard them.
+
+TC: O(logk)
+SC: O(logk)
+
+public int kth(int[] a, int[] b, int k) {
+	return findKth(a, 0, b, 0, k);
+}
+private int findKth(int[] a, int A, int[] b, int B, int k) {
+	if (A >= a.length) {
+	  return b[B + k - 1];
+  }
+  if (B >= b.length) {
+	  return a[A + k - 1];
+  }
+  if (k == 1) {
+	  return a[A] < b[B] ? a[A] : b[B];
+  }
+  int amid = A + k / 2 - 1;
+  int bmid = B + k / 2 - 1;
+  int aval = amid < a.length ? a[amid] : Integer.MAX_VALUE;
+  int bval = bmid < b.length ? b[bmid] : Integer.MAX_VALUE;
+  if (aval <= bval) {
+	  return findKth(a, amid + 1, b, B, k - k / 2);
+  } else {
+	  return findKth(a, A, b, bmid + 1, k - k / 2);
+  }
+}
