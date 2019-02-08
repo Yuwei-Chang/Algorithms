@@ -1,0 +1,33 @@
+Problem: the matrix is sorted on each row, and the first element of next row is larger than the last element of previous row.
+eg.
+1 2 3
+4 5 6
+7 8 9
+
+Solution: Regard the matrix as a int[] array. Then calculate row and column index in matrix.
+
+Time Complexity: O(logn)
+Space Complexity: O(1)
+
+Code:
+
+public int[] search(int[][] matrix, int target) {
+  if (matrix == null || matrix.length == 0) {
+    return new int[]{-1, -1};
+  }
+  int left = 0;
+  int right = matrix.length * matrix[0].length - 1;
+  while (left <= right) {
+	  int mid = left + (right - left) / 2;
+	  int row = mid / matrix[0].length;
+	  int col = mid % matrix[0].length;
+	  if (matrix[row][col] == target) {
+		  return new int[]{row, col};
+    } else if (matrix[row][col] > target) {
+	    right = mid - 1;
+    } else {
+	    left = mid + 1;
+    }
+  }
+  return new int[]{-1, -1};
+} 
